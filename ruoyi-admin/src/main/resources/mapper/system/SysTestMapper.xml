@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysTestMapper">
+    
+    <resultMap type="SysTest" id="SysTestResult">
+        <result property="id"    column="id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTame"    column="create_tame"    />
+    </resultMap>
+
+    <sql id="selectSysTestVo">
+        select id, create_by, create_tame from sys_test
+    </sql>
+
+    <select id="selectSysTestList" parameterType="SysTest" resultMap="SysTestResult">
+        <include refid="selectSysTestVo"/>
+        <where>  
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createTame != null "> and create_tame = #{createTame}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysTestById" parameterType="Long" resultMap="SysTestResult">
+        <include refid="selectSysTestVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysTest" parameterType="SysTest">
+        insert into sys_test
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTame != null">create_tame,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTame != null">#{createTame},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysTest" parameterType="SysTest">
+        update sys_test
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTame != null">create_tame = #{createTame},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysTestById" parameterType="Long">
+        delete from sys_test where id = #{id}
+    </delete>
+
+    <delete id="deleteSysTestByIds" parameterType="String">
+        delete from sys_test where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.GarCleanUnitMapper">
+    
+    <resultMap type="GarCleanUnit" id="GarCleanUnitResult">
+        <result property="cuid"    column="cuid"    />
+        <result property="city"    column="city"    />
+        <result property="region"    column="region"    />
+        <result property="street"    column="street"    />
+        <result property="regionCode"    column="region_code"    />
+        <result property="address"    column="address"    />
+        <result property="alias"    column="alias"    />
+        <result property="unitName"    column="unit_name"    />
+        <result property="contacts"    column="contacts"    />
+        <result property="contactsPhone"    column="contacts_phone"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="lon"    column="lon"    />
+        <result property="lat"    column="lat"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="status"    column="status"    />
+        <result property="unitType"    column="unit_type"    />
+        <result property="unitLeibie"    column="unit_leibie"    />
+        <result property="licenseNo"    column="license_no"    />
+        <result property="carUrl"    column="car_url"    />
+    </resultMap>
+
+    <sql id="selectGarCleanUnitVo">
+        select cuid, city, region, street, region_code, address, alias, unit_name, contacts, contacts_phone, remarks, lon, lat, create_time, create_by, update_time, update_by, del_flag, status, unit_type, unit_leibie, license_no, car_url from gar_clean_unit
+    </sql>
+
+    <select id="selectGarCleanUnitList" parameterType="GarCleanUnit" resultMap="GarCleanUnitResult">
+        <include refid="selectGarCleanUnitVo"/>
+        <where>  
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="region != null  and region != ''"> and region = #{region}</if>
+            <if test="street != null  and street != ''"> and street = #{street}</if>
+            <if test="regionCode != null  and regionCode != ''"> and region_code = #{regionCode}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="alias != null  and alias != ''"> and alias = #{alias}</if>
+            <if test="unitName != null  and unitName != ''"> and unit_name like concat('%', #{unitName}, '%')</if>
+            <if test="contacts != null  and contacts != ''"> and contacts = #{contacts}</if>
+            <if test="contactsPhone != null  and contactsPhone != ''"> and contacts_phone = #{contactsPhone}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="lon != null "> and lon = #{lon}</if>
+            <if test="lat != null "> and lat = #{lat}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="unitType != null  and unitType != ''"> and unit_type = #{unitType}</if>
+            <if test="unitLeibie != null  and unitLeibie != ''"> and unit_leibie = #{unitLeibie}</if>
+            <if test="licenseNo != null  and licenseNo != ''"> and license_no = #{licenseNo}</if>
+            <if test="carUrl != null  and carUrl != ''"> and car_url = #{carUrl}</if>
+        </where>
+    </select>
+    
+    <select id="selectGarCleanUnitByCuid" parameterType="Long" resultMap="GarCleanUnitResult">
+        <include refid="selectGarCleanUnitVo"/>
+        where cuid = #{cuid}
+    </select>
+        
+    <insert id="insertGarCleanUnit" parameterType="GarCleanUnit" useGeneratedKeys="true" keyProperty="cuid">
+        insert into gar_clean_unit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="city != null and city != ''">city,</if>
+            <if test="region != null and region != ''">region,</if>
+            <if test="street != null and street != ''">street,</if>
+            <if test="regionCode != null and regionCode != ''">region_code,</if>
+            <if test="address != null">address,</if>
+            <if test="alias != null">alias,</if>
+            <if test="unitName != null and unitName != ''">unit_name,</if>
+            <if test="contacts != null">contacts,</if>
+            <if test="contactsPhone != null">contacts_phone,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="lon != null">lon,</if>
+            <if test="lat != null">lat,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="unitType != null">unit_type,</if>
+            <if test="unitLeibie != null and unitLeibie != ''">unit_leibie,</if>
+            <if test="licenseNo != null">license_no,</if>
+            <if test="carUrl != null">car_url,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="city != null and city != ''">#{city},</if>
+            <if test="region != null and region != ''">#{region},</if>
+            <if test="street != null and street != ''">#{street},</if>
+            <if test="regionCode != null and regionCode != ''">#{regionCode},</if>
+            <if test="address != null">#{address},</if>
+            <if test="alias != null">#{alias},</if>
+            <if test="unitName != null and unitName != ''">#{unitName},</if>
+            <if test="contacts != null">#{contacts},</if>
+            <if test="contactsPhone != null">#{contactsPhone},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="lon != null">#{lon},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="unitType != null">#{unitType},</if>
+            <if test="unitLeibie != null and unitLeibie != ''">#{unitLeibie},</if>
+            <if test="licenseNo != null">#{licenseNo},</if>
+            <if test="carUrl != null">#{carUrl},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGarCleanUnit" parameterType="GarCleanUnit">
+        update gar_clean_unit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="city != null and city != ''">city = #{city},</if>
+            <if test="region != null and region != ''">region = #{region},</if>
+            <if test="street != null and street != ''">street = #{street},</if>
+            <if test="regionCode != null and regionCode != ''">region_code = #{regionCode},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="alias != null">alias = #{alias},</if>
+            <if test="unitName != null and unitName != ''">unit_name = #{unitName},</if>
+            <if test="contacts != null">contacts = #{contacts},</if>
+            <if test="contactsPhone != null">contacts_phone = #{contactsPhone},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="lon != null">lon = #{lon},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="unitType != null">unit_type = #{unitType},</if>
+            <if test="unitLeibie != null and unitLeibie != ''">unit_leibie = #{unitLeibie},</if>
+            <if test="licenseNo != null">license_no = #{licenseNo},</if>
+            <if test="carUrl != null">car_url = #{carUrl},</if>
+        </trim>
+        where cuid = #{cuid}
+    </update>
+
+    <delete id="deleteGarCleanUnitByCuid" parameterType="Long">
+        delete from gar_clean_unit where cuid = #{cuid}
+    </delete>
+
+    <delete id="deleteGarCleanUnitByCuids" parameterType="String">
+        delete from gar_clean_unit where cuid in 
+        <foreach item="cuid" collection="array" open="(" separator="," close=")">
+            #{cuid}
+        </foreach>
+    </delete>
+
+</mapper>

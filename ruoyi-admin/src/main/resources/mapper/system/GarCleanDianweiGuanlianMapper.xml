@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.GarCleanDianweiGuanlianMapper">
+    
+    <resultMap type="GarCleanDianweiGuanlian" id="GarCleanDianweiGuanlianResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="user"    column="user"    />
+        <result property="password"    column="password"    />
+        <result property="chuanjianTime"    column="chuanjian_time"    />
+        <result property="zhuangTai"    column="zhuang_tai"    />
+        <result property="mail"    column="mail"    />
+        <result property="shouji"    column="shouji"    />
+        <result property="xingbie"    column="xingbie"    />
+        <result property="beizhu"    column="beizhu"    />
+        <result property="lxrId"    column="lxr_id"    />
+    </resultMap>
+    <sql id="selectGarCleanDianweiGuanlianVo">
+        select g.id, g.name, g.user, g.password, g.chuanjian_time, g.zhuang_tai, g.mail, g.shouji, g.xingbie, g.beizhu
+        from gar_clean_dianwei_guanlian g
+        LEFT JOIN gar_clean_dianwei g2 ON g.lxr_id = g2.id
+    </sql>
+
+    <select id="selectGarCleanDianweiGuanlianList" parameterType="GarCleanDianweiGuanlian" resultMap="GarCleanDianweiGuanlianResult">
+        <include refid="selectGarCleanDianweiGuanlianVo"/>
+        <where>
+            <if test="user != null  and user != ''"> and g.user like concat('%', #{user}, '%')</if>
+            <if test="lxrId != null"> and g.lxr_id = #{lxrId}</if>
+        </where>
+    </select>
+    
+    <select id="selectGarCleanDianweiGuanlianById" parameterType="Long" resultMap="GarCleanDianweiGuanlianResult">
+        <include refid="selectGarCleanDianweiGuanlianVo"/>
+        where g.id = #{id}
+    </select>
+        
+    <insert id="insertGarCleanDianweiGuanlian" parameterType="GarCleanDianweiGuanlian" useGeneratedKeys="true" keyProperty="id">
+        insert into gar_clean_dianwei_guanlian
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="user != null and user != ''">user,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="chuanjianTime != null">chuanjian_time,</if>
+            <if test="zhuangTai != null">zhuang_tai,</if>
+            <if test="mail != null">mail,</if>
+            <if test="shouji != null">shouji,</if>
+            <if test="xingbie != null">xingbie,</if>
+            <if test="beizhu != null">beizhu,</if>
+            <if test="lxrId != null">lxr_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="user != null and user != ''">#{user},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="chuanjianTime != null">#{chuanjianTime},</if>
+            <if test="zhuangTai != null">#{zhuangTai},</if>
+            <if test="mail != null">#{mail},</if>
+            <if test="shouji != null">#{shouji},</if>
+            <if test="xingbie != null">#{xingbie},</if>
+            <if test="beizhu != null">#{beizhu},</if>
+            <if test="lxrId != null">#{lxrId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGarCleanDianweiGuanlian" parameterType="GarCleanDianweiGuanlian">
+        update gar_clean_dianwei_guanlian
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="user != null and user != ''">user = #{user},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="chuanjianTime != null">chuanjian_time = #{chuanjianTime},</if>
+            <if test="zhuangTai != null">zhuang_tai = #{zhuangTai},</if>
+            <if test="mail != null">mail = #{mail},</if>
+            <if test="shouji != null">shouji = #{shouji},</if>
+            <if test="xingbie != null">xingbie = #{xingbie},</if>
+            <if test="beizhu != null">beizhu = #{beizhu},</if>
+            <if test="lxrId != null">lxr_id = #{lxrId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGarCleanDianweiGuanlianById" parameterType="Long">
+        delete from gar_clean_dianwei_guanlian where id = #{id}
+    </delete>
+
+    <delete id="deleteGarCleanDianweiGuanlianByIds" parameterType="String">
+        delete from gar_clean_dianwei_guanlian where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('清运单位列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>市：</label>
+                                <input type="text" name="city"/>
+                            </li>
+                            <li>
+                                <label>区：</label>
+                                <input type="text" name="region"/>
+                            </li>
+                            <li>
+                                <label>街道：</label>
+                                <input type="text" name="street"/>
+                            </li>
+                            <li>
+                                <label>区域CODE：</label>
+                                <input type="text" name="regionCode"/>
+                            </li>
+                            <li>
+                                <label>详细地址：</label>
+                                <input type="text" name="address"/>
+                            </li>
+                            <li>
+                                <label>别名：</label>
+                                <input type="text" name="alias"/>
+                            </li>
+                            <li>
+                                <label>单位名称：</label>
+                                <input type="text" name="unitName"/>
+                            </li>
+                            <li>
+                                <label>联系人：</label>
+                                <input type="text" name="contacts"/>
+                            </li>
+                            <li>
+                                <label>联系电话：</label>
+                                <input type="text" name="contactsPhone"/>
+                            </li>
+                            <li>
+                                <label>备注：</label>
+                                <input type="text" name="remarks"/>
+                            </li>
+                            <li>
+                                <label>经度：</label>
+                                <input type="text" name="lon"/>
+                            </li>
+                            <li>
+                                <label>纬度：</label>
+                                <input type="text" name="lat"/>
+                            </li>
+                            <li>
+                                <label>单位类别(QY 清运公司/DW 点位单位)：</label>
+                                <input type="text" name="unitLeibie"/>
+                            </li>
+                            <li>
+                                <label>营业执照号：</label>
+                                <input type="text" name="licenseNo"/>
+                            </li>
+                            <li>
+                                <label>车辆地址配置：</label>
+                                <input type="text" name="carUrl"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:unit:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:unit:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:unit:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:unit:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:unit:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:unit:remove')}]];
+        var prefix = ctx + "system/unit";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "清运单位",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'cuid',
+                    title: 'ID自增',
+                    visible: false
+                },
+                {
+                    field: 'city',
+                    title: '市'
+                },
+                {
+                    field: 'region',
+                    title: '区'
+                },
+                {
+                    field: 'street',
+                    title: '街道'
+                },
+                {
+                    field: 'regionCode',
+                    title: '区域CODE'
+                },
+                {
+                    field: 'address',
+                    title: '详细地址'
+                },
+                {
+                    field: 'alias',
+                    title: '别名'
+                },
+                {
+                    field: 'unitName',
+                    title: '单位名称'
+                },
+                {
+                    field: 'contacts',
+                    title: '联系人'
+                },
+                {
+                    field: 'contactsPhone',
+                    title: '联系电话'
+                },
+                {
+                    field: 'remarks',
+                    title: '备注'
+                },
+                {
+                    field: 'lon',
+                    title: '经度'
+                },
+                {
+                    field: 'lat',
+                    title: '纬度'
+                },
+                {
+                    field: 'status',
+                    title: '状态(0 启用 1 禁用)'
+                },
+                {
+                    field: 'unitType',
+                    title: '单位类型 (学校、食堂、饭馆等)'
+                },
+                {
+                    field: 'unitLeibie',
+                    title: '单位类别(QY 清运公司/DW 点位单位)'
+                },
+                {
+                    field: 'licenseNo',
+                    title: '营业执照号'
+                },
+                {
+                    field: 'carUrl',
+                    title: '车辆地址配置'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.cuid + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.cuid + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

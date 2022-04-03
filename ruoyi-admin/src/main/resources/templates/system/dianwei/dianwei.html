@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('点位单位列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>单位名称：</label>
+                                <input type="text" name="dwName"/>
+                            </li>
+                            <li>
+                                <label>联系人：</label>
+                                <input type="text" name="lxr"/>
+                            </li>
+                            <li>
+                                <label>联系电话：</label>
+                                <input type="text" name="lxrDianhua"/>
+                            </li>
+                            <li>
+                                <label>单位类型：</label>
+                                <select name="danweiType">
+                                    <option value>所有</option>
+                                    <option>学校</option>
+                                    <option>食堂</option>
+                                    <option>饭店</option>
+                                    <option>酒店</option>
+                                    <option>商超</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>状态：</label>
+                                <select name="zhuangTai">
+                                    <option value>所有</option>
+                                    <option value="1">启用</option>
+                                    <option value="0">禁用</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:dianwei:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:dianwei:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:dianwei:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+<!--                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:dianwei:export">-->
+<!--                    <i class="fa fa-download"></i> 导出-->
+<!--                </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        // 操作按钮
+        var editFlag = [[${@permission.hasPermi('system:dianwei:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:dianwei:remove')}]];
+        // 状态字典,显示状态样式
+        var datas = [[${@dict.getType('zhuangtai')}]];
+        var prefix = ctx + "system/dianwei";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "点位单位",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: '编号',
+                    visible: true
+                },
+                {
+                    field: 'bName',
+                    title: '别名'
+                },
+                {
+                    field: 'dwName',
+                    title: '单位名称'
+                },
+                {
+                    field: 'address',
+                    title: '详细地址'
+                },
+                {
+                    field: 'lxr',
+                    title: '联系人'
+                },
+                {
+                    field: 'lxrDianhua',
+                    title: '联系电话'
+                },
+                {
+                    field: 'danweiType',
+                    title: '单位类型'
+                },
+                {
+                    field: 'chuanjianTime',
+                    title: '创建时间'
+                },
+                {
+                    field: 'zhuangTai',
+                    title: '状态',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        // datas:字典变量 value:传入值
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')">编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')">删除</a>');
+                        actions.push('<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')">详情</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs " href="javascript:void(0)" onclick="detail(\'' + row.id + '\')">禁用</a> ');
+                        actions.push('<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick="openz(\'' + row.id + '\')">账号管理</a> ');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        /**
+         * 账号管理
+         * @param id
+         */
+        function openz(id){
+            var url = '/system/guanlian/' + id;
+            $.modal.parentTab('账号管理',url);
+        }
+
+        /**
+         * 状态
+         * @param id
+         */
+        function detail(id){
+            $.modal.confirm("确认要停用用户吗？", function() {
+                $.operate.post(prefix + "/changeStatus", { "id": id, "status": 1 });
+            })
+        }
+    </script>
+</body>
+</html>

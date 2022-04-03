@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.GarCleanRouteTravelMapper">
+    
+    <resultMap type="GarCleanRouteTravel" id="GarCleanRouteTravelResult">
+        <result property="id"    column="id"    />
+        <result property="crid"    column="crid"    />
+        <result property="poid"    column="poid"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="entTime"    column="ent_time"    />
+        <result property="sort"    column="sort"    />
+        <result property="timeCell"    column="time_cell"    />
+        <result property="tid"    column="tid"    />
+    </resultMap>
+
+    <sql id="selectGarCleanRouteTravelVo">
+        select id, crid, poid, start_time, ent_time, sort, time_cell, tid from gar_clean_route_travel
+    </sql>
+
+    <select id="selectGarCleanRouteTravelList" parameterType="GarCleanRouteTravel" resultMap="GarCleanRouteTravelResult">
+        <include refid="selectGarCleanRouteTravelVo"/>
+        <where>  
+            <if test="crid != null "> and crid = #{crid}</if>
+            <if test="poid != null "> and poid = #{poid}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="entTime != null "> and ent_time = #{entTime}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="timeCell != null "> and time_cell = #{timeCell}</if>
+            <if test="tid != null "> and tid = #{tid}</if>
+        </where>
+    </select>
+    
+    <select id="selectGarCleanRouteTravelById" parameterType="Long" resultMap="GarCleanRouteTravelResult">
+        <include refid="selectGarCleanRouteTravelVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGarCleanRouteTravel" parameterType="GarCleanRouteTravel" useGeneratedKeys="true" keyProperty="id">
+        insert into gar_clean_route_travel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="crid != null">crid,</if>
+            <if test="poid != null">poid,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="entTime != null">ent_time,</if>
+            <if test="sort != null">sort,</if>
+            <if test="timeCell != null">time_cell,</if>
+            <if test="tid != null">tid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="crid != null">#{crid},</if>
+            <if test="poid != null">#{poid},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="entTime != null">#{entTime},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="timeCell != null">#{timeCell},</if>
+            <if test="tid != null">#{tid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGarCleanRouteTravel" parameterType="GarCleanRouteTravel">
+        update gar_clean_route_travel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="crid != null">crid = #{crid},</if>
+            <if test="poid != null">poid = #{poid},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="entTime != null">ent_time = #{entTime},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="timeCell != null">time_cell = #{timeCell},</if>
+            <if test="tid != null">tid = #{tid},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGarCleanRouteTravelById" parameterType="Long">
+        delete from gar_clean_route_travel where id = #{id}
+    </delete>
+
+    <delete id="deleteGarCleanRouteTravelByIds" parameterType="String">
+        delete from gar_clean_route_travel where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--c3p0配置文件-->
+<c3p0-config>
+	<!-- This app is massive! -->
+	<named-config name="mysql">
+		<!--连接数据的基本信息,连接驱动-->
+		<property name="driverClass">com.mysql.jdbc.Driver</property>
+		<!--数据库地址-->
+		<property name="jdbcUrl">jdbc:mysql://rm-t4n4141f6qw6o31n5yo.mysql.singapore.rds.aliyuncs.com/mvcproject</property>
+		<!--数据库用户名-->
+		<property name="user">ordinary</property>
+		<!--数据库密码-->
+		<property name="password">PDA1580_0</property>
+
+		<!--数据库中的连接数量不足时,向数据库申请增加连接数量5-->
+		<property name="acquireIncrement">5</property>
+		<!--初始化数据库连接池时连接的数量10-->
+		<property name="initialPoolSize">10</property>
+		<!--数据库连接池中最小的数据库连接数5-->
+		<property name="minPoolSize">5</property>
+		<!--数据库连接池中最大的数据库连接数100-->
+		<property name="maxPoolSize">100</property>
+
+		<!--c3p0数据库连接池可以维护的Statement数量2-->
+		<property name="maxStatements">2</property>
+		<!--每个连接同时可以使用Statement的数量5-->
+		<property name="maxStatementsPerConnection">5</property>
+	</named-config>
+</c3p0-config>

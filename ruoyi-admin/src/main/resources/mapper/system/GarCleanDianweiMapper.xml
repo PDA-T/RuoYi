@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.GarCleanDianweiMapper">
+    
+    <resultMap type="GarCleanDianwei" id="GarCleanDianweiResult">
+        <result property="id"    column="id"    />
+        <result property="bName"    column="b_name"    />
+        <result property="dwName"    column="dw_name"    />
+        <result property="address"    column="address"    />
+        <result property="lxr"    column="lxr"    />
+        <result property="lxrDianhua"    column="lxr_dianhua"    />
+        <result property="danweiType"    column="danwei_type"    />
+        <result property="chuanjianTime"    column="chuanjian_time"    />
+        <result property="zhuangTai"    column="zhuang_tai"    />
+        <result property="quyu"    column="quyu"    />
+        <result property="jingdu"    column="jingdu"    />
+        <result property="weidu"    column="weidu"    />
+        <result property="beizhu"    column="beizhu"    />
+    </resultMap>
+
+    <sql id="selectGarCleanDianweiVo">
+        select id, b_name, dw_name, address, lxr, lxr_dianhua, danwei_type, chuanjian_time, zhuang_tai, quyu, jingdu, weidu, beizhu from gar_clean_dianwei
+    </sql>
+
+    <select id="selectGarCleanDianweiList" parameterType="GarCleanDianwei" resultMap="GarCleanDianweiResult">
+        <include refid="selectGarCleanDianweiVo"/>
+        <where>  
+            <if test="dwName != null  and dwName != ''"> and dw_name like concat('%', #{dwName}, '%')</if>
+            <if test="lxr != null  and lxr != ''"> and lxr = #{lxr}</if>
+            <if test="lxrDianhua != null "> and lxr_dianhua = #{lxrDianhua}</if>
+            <if test="danweiType != null  and danweiType != ''"> and danwei_type = #{danweiType}</if>
+            <if test="zhuangTai != null "> and zhuang_tai = #{zhuangTai}</if>
+        </where>
+    </select>
+    
+    <select id="selectGarCleanDianweiById" parameterType="Long" resultMap="GarCleanDianweiResult">
+        <include refid="selectGarCleanDianweiVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGarCleanDianwei" parameterType="GarCleanDianwei" useGeneratedKeys="true" keyProperty="id">
+        insert into gar_clean_dianwei
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bName != null and bName != ''">b_name,</if>
+            <if test="dwName != null and dwName != ''">dw_name,</if>
+            <if test="address != null">address,</if>
+            <if test="lxr != null and lxr != ''">lxr,</if>
+            <if test="lxrDianhua != null">lxr_dianhua,</if>
+            <if test="danweiType != null and danweiType != ''">danwei_type,</if>
+            <if test="chuanjianTime != null">chuanjian_time,</if>
+            <if test="zhuangTai != null">zhuang_tai,</if>
+            <if test="quyu != null and quyu != ''">quyu,</if>
+            <if test="jingdu != null">jingdu,</if>
+            <if test="weidu != null">weidu,</if>
+            <if test="beizhu != null">beizhu,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bName != null and bName != ''">#{bName},</if>
+            <if test="dwName != null and dwName != ''">#{dwName},</if>
+            <if test="address != null">#{address},</if>
+            <if test="lxr != null and lxr != ''">#{lxr},</if>
+            <if test="lxrDianhua != null">#{lxrDianhua},</if>
+            <if test="danweiType != null and danweiType != ''">#{danweiType},</if>
+            <if test="chuanjianTime != null">#{chuanjianTime},</if>
+            <if test="zhuangTai != null">#{zhuangTai},</if>
+            <if test="quyu != null and quyu != ''">#{quyu},</if>
+            <if test="jingdu != null">#{jingdu},</if>
+            <if test="weidu != null">#{weidu},</if>
+            <if test="beizhu != null">#{beizhu},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGarCleanDianwei" parameterType="GarCleanDianwei">
+        update gar_clean_dianwei
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bName != null and bName != ''">b_name = #{bName},</if>
+            <if test="dwName != null and dwName != ''">dw_name = #{dwName},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="lxr != null and lxr != ''">lxr = #{lxr},</if>
+            <if test="lxrDianhua != null">lxr_dianhua = #{lxrDianhua},</if>
+            <if test="danweiType != null and danweiType != ''">danwei_type = #{danweiType},</if>
+            <if test="chuanjianTime != null">chuanjian_time = #{chuanjianTime},</if>
+            <if test="zhuangTai != null">zhuang_tai = #{zhuangTai},</if>
+            <if test="quyu != null and quyu != ''">quyu = #{quyu},</if>
+            <if test="jingdu != null">jingdu = #{jingdu},</if>
+            <if test="weidu != null">weidu = #{weidu},</if>
+            <if test="beizhu != null">beizhu = #{beizhu},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGarCleanDianweiById" parameterType="Long">
+        delete from gar_clean_dianwei where id = #{id}
+    </delete>
+
+    <delete id="deleteGarCleanDianweiByIds" parameterType="String">
+        delete from gar_clean_dianwei where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
